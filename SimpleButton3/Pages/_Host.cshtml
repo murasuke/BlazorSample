@@ -1,0 +1,12 @@
+﻿@page
+@namespace SimpleButton3.Pages
+<!DOCTYPE html>
+<html lang="ja">
+<head></head>
+<body>
+    <app>
+        @(await Html.RenderComponentAsync<App>(RenderMode.ServerPrerendered))
+    </app>
+    <script src="_framework/blazor.server.js"></script>
+</body>
+</html>

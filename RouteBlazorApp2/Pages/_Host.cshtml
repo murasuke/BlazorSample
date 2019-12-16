@@ -1,0 +1,11 @@
+﻿@page
+@namespace RouteBlazorApp2.Pages
+<!DOCTYPE html>
+<html lang="ja">
+<head></head>
+<body>
+    <app>
+        @(await Html.RenderComponentAsync<App>(RenderMode.ServerPrerendered))
+    </app>
+</body>
+</html>
