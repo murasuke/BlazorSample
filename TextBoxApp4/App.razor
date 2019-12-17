@@ -1,0 +1,10 @@
+﻿<Router AppAssembly="@typeof(Program).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData"></RouteView>
+    </Found>
+    <NotFound>
+        <LayoutView>
+            <p>Sorry, there's noting at this address.</p>
+        </LayoutView>
+    </NotFound>
+</Router>

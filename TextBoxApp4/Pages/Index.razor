@@ -1,0 +1,27 @@
+﻿@page "/"
+<h3>TextBox Demo</h3>
+
+
+value:
+<input id="text1" type="text" @bind="@value1"  />
+<br />
+color:
+<input id="color1" type="color" @bind="@color" />
+<br />
+<MyParamComponent text="@value1" textColor="@color"></MyParamComponent>
+
+<br />
+<button @onclick="ButtonClick">Button1</button>
+
+<p>@InputText</p>
+@code {
+    string value1 = "何か入力";
+    string color = "gray";
+    string InputText;
+
+    void ButtonClick()
+    {
+        InputText = value1 + " が入力されました";
+    }
+}
+
