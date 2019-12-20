@@ -1,19 +1,32 @@
 ﻿@page "/"
 @namespace Microsoft.AspNetCore.Components.Web
 <h3>Buttonクリック＆MouseMoveサンプル</h3>
-<div @onmousemove="MouseMove" style="border: 1px solid skyblue; height:200px;">
-    <button class="" @onclick="ButtonClick">Button1</button>
+ <div>
+    <button class="" @onclick="ButtonClick">時間(DateTime.Now)を表示</button> <br />
     <p>@messageText</p>
+ </div>
+<div @onmousemove="@(e => messageText=$"onMouseMove(x,y)=({e.ClientX},{e.ClientY})" )" 
+     style="border: 1px solid skyblue; height:300px;" 
+     @onclick="DivClick">
+ 
+    <p style="position:absolute;top:@(_top)px;left:@(_left)px;">クリック(@_top, @_left)</p>
 </div>
 
 
 @code {
     string messageText;
+    double _top = 140;
+    double _left = 20;
     void ButtonClick(MouseEventArgs e)
     {
-        messageText = $"ボタンがクリックされました。(x,y)=({e.ClientX},{e.ClientY})" ;
+        messageText = $"ボタンがクリックされました。({DateTime.Now.ToString()})" ;
     }
 
+    void DivClick(MouseEventArgs e)
+    {
+        _top = e.ClientY;
+        _left = e.ClientX;
+    }
     void MouseMove(MouseEventArgs e)
     {
         messageText = $"onMouseMove(x,y)=({e.ClientX},{e.ClientY})";
