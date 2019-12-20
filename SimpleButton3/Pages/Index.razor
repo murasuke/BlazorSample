@@ -1,21 +1,9 @@
 ﻿@page "/"
-@namespace Microsoft.AspNetCore.Components.Web
-<h3>Buttonクリック＆MouseMoveサンプル</h3>
-<div @onmousemove="MouseMove" style="border: 1px solid skyblue; height:200px;">
-    <button class="" @onclick="ButtonClick">Button1</button>
-    <p>@messageText</p>
-</div>
+@namespace Microsoft.AspNetCore.Components.Routing
 
+<h3>Index</h3>
 
-@code {
-    string messageText;
-    void ButtonClick(MouseEventArgs e)
-    {
-        messageText = $"ボタンがクリックされました。(x,y)=({e.ClientX},{e.ClientY})" ;
-    }
-
-    void MouseMove(MouseEventArgs e)
-    {
-        messageText = $"onMouseMove(x,y)=({e.ClientX},{e.ClientY})";
-    }
-}
+<ul>
+    <li><NavLink href="ButtonClick">ButtonClick</NavLink></li>
+    <li><NavLink href="CodeBehind">CodeBehind</NavLink></li>
+</ul>

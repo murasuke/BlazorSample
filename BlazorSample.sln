@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RouteBlazorApp2", "RouteBla
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleButton3", "SimpleButton3\SimpleButton3.csproj", "{28A70773-96B5-49C2-8F34-9C739F1396EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextBoxApp4", "TextBoxApp4\TextBoxApp4.csproj", "{7048E06C-220B-4DC0-84CF-A9E091B0C761}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextBoxApp4", "TextBoxApp4\TextBoxApp4.csproj", "{7048E06C-220B-4DC0-84CF-A9E091B0C761}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
