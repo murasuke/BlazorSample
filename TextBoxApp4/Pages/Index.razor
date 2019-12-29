@@ -1,27 +1,141 @@
 ﻿@page "/"
-<h3>TextBox Demo</h3>
+@page "/{Id:int}"
+
+@using TextBoxApp4.Data
+@using TextBoxApp4.Shared
+
+@inject UserDataService UserService;
+@inject IJSRuntime JsRuntime;
+
+<div class="container">
+    <h3>User Master Maintenance</h3>
+    <div class="form-group row">
+        <label for="text3a" class="col-sm-2 col-form-label  text-md-right">Id</label>
+        <div class="col-sm-3 col-9">
+            <input type="number" id="text3a" class="form-control text-right" disabled="@idDisabled" value="@this.User.Id" @onchange="changeId">
+        </div>
+        <div class="col-sm-1 col-2 mr-2">
+            <button class="btn btn-info " @onclick="ShowDialog">Search</button>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="text3b" class="col-sm-2 col-form-label  text-md-right">Name</label>
+        <div class="col-sm-5">
+            <input type="text" id="text3b" class="form-control" @bind="this.User.Name">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="text3c" class="col-sm-2 col-form-label text-md-right">Birth</label>
+        <div class="col-sm-4">
+            <input type="date" id="text3c" class="form-control" @bind="this.User.Birth">
+        </div>
+    </div>
 
 
-value:
-<input id="text1" type="text" @bind="@value1"  />
-<br />
-color:
-<input id="color1" type="color" @bind="@color" />
-<br />
-<MyParamComponent text="@value1" textColor="@color"></MyParamComponent>
+    <div class="col-sm-8 text-right">
+        <button type="submit" class="btn btn-primary" style="width:100px;" @onclick="UpdateUser">更 新</button>
+    </div>
+    <div class="alert alert-info alert-dismissible fade mt-3 @showInfo">
+        @info
+        <button class="close" data-dismiss="alert">&times;</button>
+    </div>
+</div>
 
-<br />
-<button @onclick="ButtonClick">Button1</button>
+@*検索ダイアログ*@
+@if (showDialog)
+{
+    <SearchDialog OnSelectItem="@(async (id) => { await Task.Yield(); await ReloadData(id); })"
+                  OnDeleteItem="@(async (id) => { await Task.Yield(); await Delete(id); })"
+                  OnCloseDialog="@(async ()=> { await Task.Yield(); showDialog = false; })" />
+}
 
-<p>@InputText</p>
-@code {
-    string value1 = "何か入力";
-    string color = "gray";
-    string InputText;
 
-    void ButtonClick()
+
+@code{
+    [Parameter]
+    public int Id { get; set; }
+
+
+    string info = "";
+    string showInfo = "";
+
+    private User User = new User();
+
+    bool idDisabled = false;
+    bool showDialog = false;
+
+
+    protected override void OnParametersSet()
     {
-        InputText = value1 + " が入力されました";
+        if (Id != 0)
+        {
+            idDisabled = true;
+        }
+    }
+
+    async Task changeId(ChangeEventArgs e)
+    {
+        await ReloadData(Convert.ToInt32(e.Value));
+    }
+
+    void ShowDialog(EventArgs e)
+    {
+        showDialog = false;
+        showDialog = true;
+    }
+
+
+    async Task ReloadData(int id)
+    {
+        User = await UserService.GetUserByIdAsync(id);
+        if (User == null)
+        {
+            this.User = new User();
+            this.User.Id = id;
+            this.User.Insert = true;
+        }
+        ShowInfo("");
+        showDialog = false;
+    }
+
+    async Task Delete(int id)
+    {
+        await UserService.Delete(id);
+        await ReloadData(id);
+        ShowInfo($"{id}を削除しました");
+        showDialog = false;
+    }
+
+    async Task UpdateUser()
+    {
+
+        if (this.User.Insert)
+        {
+            // Insert
+            this.User = await UserService.Insert(this.User);
+            ShowInfo("登録しました");
+        }
+        else
+        {
+            // Update
+            this.User = await UserService.Update(this.User);
+            ShowInfo("更新しました");
+        }
+    }
+
+    public void ShowInfo(string infoText)
+    {
+        this.info = infoText;
+        if (string.IsNullOrWhiteSpace(infoText))
+        {
+            this.showInfo = "";
+        }
+        else
+        {
+            this.showInfo = "show";
+        }
     }
 }
+
 

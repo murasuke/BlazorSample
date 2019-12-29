@@ -1,12 +1,31 @@
 ﻿@page
 @namespace TextBoxApp4.Pages
+
+
 <!DOCTYPE html>
 <html lang="ja">
-<heed></heed>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TextBoxApp4</title>
+    <base href="~/" />
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
+    <link href="css/site.css" rel="stylesheet" />
+    <script>
+        function showDialog(dialog) {
+            $(dialog).modal("show");
+        }
+    </script>
+</head>
 <body>
     <app>
         @(await Html.RenderComponentAsync<App>(RenderMode.ServerPrerendered))
     </app>
+
     <script src="_framework/blazor.server.js"></script>
+    <script src="~/js/jquery/jquery.js"></script>
+    <script src="~/js/popper.js/popper.min.js"></script>
+    <script src="~/js/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
