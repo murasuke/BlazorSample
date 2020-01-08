@@ -13,7 +13,7 @@
         <div class="form-group row ">
             <label for="text3a" class="col-sm-2 col-form-label  text-md-right">Id</label>
             <div class="col-sm-3 col-9">
-                <input type="number" id="text3a" class="form-control text-right" disabled="@idDisabled" value="@this.User.Id" @onchange="async (e) => await ReloadData(Convert.ToInt32(e.Value)">
+                <input type="number" id="text3a" class="form-control text-right" disabled="@idDisabled" value="@this.User.Id" @onchange="async (e) => await ReloadData(string.IsNullOrWhiteSpace(e.Value?.ToString())? 0 :Convert.ToInt32(e.Value))">
             </div>
             <div class="col-sm-1 col-2 mr-2">
                 <button class="btn btn-info " @onclick="() => ShowDialog(true)">Search</button>
@@ -37,7 +37,7 @@
         <div class="col-sm-8 text-right">
             <button type="submit" class="btn btn-primary" style="width:100px;" @onclick="UpdateUser">更 新</button>
         </div>
-        <div class="alert alert-info alert-dismissible fade mt-3 @showInfo">
+        <div class="alert @infoStyle alert-dismissible fade mt-3 @showInfo">
             @info
             <button class="close" data-dismiss="alert">&times;</button>
         </div>
@@ -56,17 +56,36 @@
     [Parameter]
     public int Id { get; set; }
 
-
+    /// <summary>
+    /// 情報表示(ステータスバー)
+    /// </summary>
     string info = "";
+
+    /// <summary>
+    /// 情報表示のスタイル
+    /// </summary>
+    string infoStyle = "alert-info";
 
     string showInfo {get{ return string.IsNullOrWhiteSpace(info)? "": "show"; } }
 
+    /// <summary>
+    /// 画面にバインドするModel
+    /// </summary>
     private User User = new User();
 
+    /// <summary>
+    /// URLにIdを指定した場合、Idを入力不可にするためのフラグ
+    /// </summary>
     bool idDisabled = false;
+
+    /// <summary>
+    /// ユーザ一覧ダイアログ表示切替フラグ
+    /// </summary>
     bool showDialog = false;
 
-
+    /// <summary>
+    /// URLにIdが指定されている場合、値を取得して入力不可に変更
+    /// </summary>
     protected override void OnParametersSet()
     {
         if (Id != 0)
@@ -75,7 +94,10 @@
         }
     }
 
-    // ユーザ一覧ダイアログ表示
+    /// <summary>
+    /// ユーザ一覧ダイアログ表示
+    /// </summary>
+    /// <param name="show"></param>
     void ShowDialog( bool show )
     {
         showDialog = false;
@@ -85,7 +107,11 @@
         }
     }
 
-    // ユーザ表示処理
+    /// <summary>
+    /// ユーザ表示処理
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     async Task ReloadData(int id)
     {
         User = await UserService.GetUserByIdAsync(id);
@@ -99,7 +125,11 @@
         ShowDialog(false);
     }
 
-    // 削除処理
+    /// <summary>
+    /// 削除処理
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     async Task Delete(int id)
     {
         await UserService.Delete(id);
@@ -108,9 +138,17 @@
         ShowDialog(false);
     }
 
-    // 更新処理
+    /// <summary>
+    /// 更新処理
+    /// </summary>
+    /// <returns></returns>
     async Task UpdateUser()
     {
+        if( !isValid() )
+        {
+            return;
+        }
+
         if (this.User.Insert)
         {
             // Insert
@@ -125,9 +163,46 @@
         }
     }
 
+    /// <summary>
+    /// 入力チェック
+    /// </summary>
+    /// <returns></returns>
+    bool isValid()
+    {
+        if( this.User.Id <= 0)
+        {
+            ShowError($"{nameof(this.User.Id)}は0以上を入力してください");
+            return false;
+        }
+
+        if(string.IsNullOrWhiteSpace(this.User.Name))
+        {
+            ShowError($"{nameof(this.User.Name)}は必須です");
+            return false;
+        }
+
+        if(this.User.Birth > DateTime.Now)
+        {
+            ShowError($"{nameof(this.User.Birth)}は本日以前の日付を入力してください");
+            return false;
+
+        }
+        return true;
+    }
+
     //ステータスバー表示
     public void ShowInfo(string infoText)
     {
+        //情報表示領域のstyleを変更(情報表示色)
+        this.infoStyle = "alert-info";
+        this.info = infoText;
+    }
+
+    //エラー表示
+    public void ShowError(string infoText)
+    {
+        //情報表示領域のstyleを変更(警告色)
+        this.infoStyle = "alert-danger";
         this.info = infoText;
     }
 }
