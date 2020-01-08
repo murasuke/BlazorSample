@@ -1,0 +1,83 @@
+﻿@using TextBoxApp4.Data
+
+@inject UserDataService UserService;
+@inject IJSRuntime JsRuntime;
+
+<div class="modal fade" id="searchDialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h4>User List</h4>
+                </div>
+            </div>
+            <div class="modal-body">
+
+                @if (Users != null)
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>name</th>
+                                <th>birth</th>
+                                <th> </th>
+                            </tr>
+                        </thead>
+                        @foreach (var user in Users)
+                        {
+                            <tr>
+                                <td><a href="#" data-dismiss="modal" @onclick="() => OnSelectItem.InvokeAsync(user.Id)">@user.Id</a></td>
+                                <td><a href="#" data-dismiss="modal" @onclick="() => OnSelectItem.InvokeAsync(user.Id)">@user.Name</a></td>
+                                <td><a href="#" data-dismiss="modal" @onclick="() => OnSelectItem.InvokeAsync(user.Id)">@(user.Birth.HasValue ? user.Birth.Value.ToShortDateString() : "")</a></td>
+                                <td><a href="#" data-dismiss="modal" @onclick="() => DeleteItem(user.Id)">削除</a></td>
+                            </tr>
+                        }
+                    </table>
+                }
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" @onclick="() => OnCloseDialog.InvokeAsync(true)">閉じる</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public EventCallback<int> OnSelectItem { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnDeleteItem { get; set; }
+
+    [Parameter]
+    public EventCallback OnCloseDialog { get; set; }
+
+    public List<User> Users { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        // ユーザー一覧を取得する
+        Users = await UserService.GetUsersAsync();
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // JQueryのダイアログ表示関数を呼び出して、ダイアログを表示する。
+        await JsRuntime.InvokeVoidAsync("showDialog", "#searchDialog");
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+
+    private async Task DeleteItem(int id)
+    {
+        await OnDeleteItem.InvokeAsync(id);
+        Users = await UserService.GetUsersAsync();
+    }
+
+
+
+}

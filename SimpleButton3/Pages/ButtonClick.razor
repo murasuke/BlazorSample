@@ -1,0 +1,31 @@
+﻿@page "/ButtonClick"
+@inject NavigationManager NavMgr
+
+@namespace Microsoft.AspNetCore.Components.Web
+
+<h3>Buttonクリック＆MouseMoveサンプル</h3>
+<div>
+    <button class="" @onclick="@( e=> messageText = $"ボタンがクリックされました。({DateTime.Now.ToString()})")">Button1</button>
+    <p>@messageText</p>
+</div>
+<div @onmousemove="MouseMove"
+     @onclick="DivClick"
+     style="border: 1px solid skyblue; height:200px;">
+    <p style="position:absolute;top:@(_top)px;left:@(_left)px">onclick(@_left,@_top)</p>
+</div>
+<button @onclick="@(e=>NavMgr.NavigateTo("/"))">戻る</button>
+
+@code {
+    string messageText;
+    double _top = 160;
+    double _left = 20;
+    void DivClick(MouseEventArgs e)
+    {
+        _top = e.ClientY;
+        _left = e.ClientX;
+    }
+    void MouseMove(MouseEventArgs e)
+    {
+        messageText = $"onMouseMove(x,y) =({e.ClientX},{e.ClientY})";
+    }
+}

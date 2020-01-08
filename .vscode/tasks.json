@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "buildTextBoxApp4",
+            "label": "build",
             "command": "dotnet",
             "type": "process",
             "args": [
@@ -14,7 +14,7 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "build",
+            "label": "buildSimpleButton3",
             "command": "dotnet",
             "type": "process",
             "args": [
@@ -23,7 +23,11 @@
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
-            "problemMatcher": "$msCompile"
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         },
         {
             "label": "publish",
