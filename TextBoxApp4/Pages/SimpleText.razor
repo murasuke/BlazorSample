@@ -1,0 +1,57 @@
+﻿@page "/text"
+
+<h4>足し算サンプル1(onclickで計算)</h4>
+
+
+<div class="container">
+    <div class="form-group row align-items-center">
+        <input type="number" class="form-control text-right col-1 mr-2" @bind="lhv1" /> ＋
+        <input type="number" class="form-control text-right col-1 mx-2" @bind="rhv1" /> ＝
+        <input type="number" class="form-control text-right col-1 ml-2 disabled" disabled value="@result1" />
+        <input type="button" value="計算" class="ml-2" @onclick="Sum1" />
+    </div>
+
+</div>
+@code {
+    int lhv1 = 10;
+    int rhv1 = 1;
+    int result1 = 0;
+    void Sum1()
+    {
+        result1 = lhv1 + rhv1;
+    }
+}
+
+<hr />
+
+<h4>足し算サンプル2(変更(onchange)時に自動計算)</h4>
+
+<div class="container">
+    <div class="form-group row align-items-center">
+        <input type="number" class="form-control text-right col-1 mr-2" @bind="lhv2" /> ＋
+        <input type="number" class="form-control text-right col-1 mx-2" @bind="rhv2" /> ＝
+        <input type="number" class="form-control text-right col-1 ml-2 disabled" disabled value="@result2" />
+    </div>
+</div>
+@code {
+    int lhv2 = 20;
+    int rhv2 = 2;
+    int result2 { get { return lhv2 + rhv2; } }
+}
+
+<hr />
+<h4>足し算サンプル3(変更(oninput)時に自動計算)</h4>
+
+<div class="container">
+    <div class="form-group row align-items-center">
+        <input type="number" class="form-control text-right col-1 mr-2" @bind-value="lhv3" @bind-value:event="oninput" /> ＋
+        <input type="number" class="form-control text-right col-1 mx-2" @bind-value="rhv3" @bind-value:event="oninput" /> ＝
+        <input type="number" class="form-control text-right col-1 ml-2 disabled" disabled value="@(lhv3+rhv3)" />
+    </div>
+</div>
+@code {
+    int lhv3 = 30;
+    int rhv3 = 3;
+}
+
+<hr />

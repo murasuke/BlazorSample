@@ -12,7 +12,12 @@
                 </div>
             </div>
             <div class="modal-body">
-
+                <div class="form-group row ml-2">
+                    <label for="textName" class="col-form-label">Name(部分一致)</label>
+                    <div class=" ml-2">
+                        <input type="text" id="textName" class="form-control" @bind="@userName" @oninput="GetUserByName" />
+                    </div>
+                </div>
                 @if (Users != null)
                 {
                     <table class="table">
@@ -54,6 +59,8 @@
     [Parameter]
     public EventCallback OnCloseDialog { get; set; }
 
+    string userName = "";
+
     public List<User> Users { get; set; }
 
 
@@ -72,12 +79,15 @@
     }
 
 
+    private async Task GetUserByName( ChangeEventArgs e )
+    {
+        Users = await UserService.GetUesrByName( e.Value.ToString() );
+    }
+
     private async Task DeleteItem(int id)
     {
         await OnDeleteItem.InvokeAsync(id);
         Users = await UserService.GetUsersAsync();
     }
-
-
-
+         
 }

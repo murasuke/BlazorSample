@@ -34,6 +34,18 @@ namespace TextBoxApp4.Data
               _Context.User.Find(id);
         
         /// <summary>
+        /// Nameで部分一致検索
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Task<List<User>> GetUesrByName( string name)
+        {
+            return _Context.User
+                .Where(usr => usr.Name.Contains( name ))
+                .ToListAsync();                
+        }
+
+        /// <summary>
         /// id指定でユーザを検索
         /// </summary>
         /// <returns></returns>
