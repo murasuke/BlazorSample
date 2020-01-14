@@ -3,6 +3,8 @@
 ## Blazorとは
 　https://www.slideshare.net/jsakamoto/c-single-page-web-blazor-148130367
 
+  Single Page Applicaitonを.NET Core で実装するフレームワーク
+
 - 【Blazor サーバー】と【Blazor WebAssembly】の2種類があります
   - Blazor サーバー
     - Webサーバで.NET(のDLL)が動作するモデル
@@ -13,7 +15,7 @@
     - ブラウザで.NET(のDLL)が動作するモデル
     - WebAssemblyで.NETランタイムが動き、DLLを直接実行する
     - ブラウザで発生したイベントを、ブラウザ内部で実行する
-    (ASP.NET Core web サーバーは不要。)
+    (ASP.NET Core web サーバーは不要。Webサーバに常時接続することも不要。)
     - ブラウザが.NETのDLLをロードするため、参照が多いと起動に時間がかかる
     - 2020/01でプレビュー段階(未リリース、2020年中にリリースされる予定)
 
@@ -36,11 +38,24 @@
   - VisualStudioをインストールしていれば利用可能(個別にインストールも可能)
   - DB環境自体をプロジェクト内に含め、ソース管理対象とすることで、DB環境をポータブルにする目的で利用
 
-クライアント
-- Bootstrap4.0
-  - レスポンシブ対応、デザイン、スタイル指定の省力化のため利用
-- JQuery
-  - Bootstrapで必要(ダイアログ表示など)
+- クライアントライブラリ
+  - Bootstrap4.0
+    - レスポンシブ対応、デザイン、スタイル指定の省力化のため利用
+  - JQuery
+    - Bootstrapで必要(ダイアログ表示など)
+
+- 開発環境
+  - Visual Studio 2019 (家での開発用環境)
+    - v16.4 にアップデート済み
+    - GitHub用に拡張機能を追加(GitHub Extention for Visual Studio)
+  - Visual Studio Code (会社での開発環境)
+    - C# for Visual Studio Code 導入済み
+  - ソース管理
+    - GitHub
+      - 家で作成したソースを Git cloneで複製して環境作成
+  - SQLServer LocalDB
+    - プロジェクト毎にmdbを管理するために利用(子プロセスしてSQLServerが起動)
+
 
 
 
