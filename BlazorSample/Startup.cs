@@ -10,36 +10,37 @@ using Microsoft.Extensions.Hosting;
 
 namespace MiniBlazorApp1
 {
+    //
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        // ランタイムから呼び出されるメソッド(Configureより先)
+        // Webアプリに必要な機能をここで追加する
         public void ConfigureServices(IServiceCollection services)
         {
+            // ServerSideBlazorを利用するため、RazorPagesとServerSideBlazorを追加
             services.AddRazorPages();       //Blazor
             services.AddServerSideBlazor(); //Blazor
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // ランタイムから呼び出される(ConfigureServicesの後)
+        // HTTPリクエストパイプラインを設定する
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
+                // 開発中の場合、開発者例外ページを有効にする
                 app.UseDeveloperExceptionPage();
             }
 
+            // ルーティングを標準設定で構成する
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                //��Blazor
-                //endpoints.MapGet("/", async context =>
-                //{
-                //    await context.Response.WriteAsync("Hello World!");
-                //});
-                //��Blazor
-
+                // 対話型コンポーネントの着信接続を受け入れる（よくわからない）
                 endpoints.MapBlazorHub(); //Blazor
+
+                // フォールバックページ(他に該当がない場合に表示する)
                 endpoints.MapFallbackToPage("/index"); //Blazor
             });
         }
